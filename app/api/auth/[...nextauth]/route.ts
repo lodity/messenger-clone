@@ -34,10 +34,8 @@ export const authOptions: AuthOptions = {
           throw new Error("Invalid Credentials");
         }
 
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
           where: {
-            //TODO check to work
-            id: undefined,
             email: credentials.email,
           },
         });
