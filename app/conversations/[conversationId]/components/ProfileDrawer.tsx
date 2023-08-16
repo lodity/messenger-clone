@@ -1,12 +1,13 @@
 "use client";
 
-import { FC, Fragment, useMemo } from "react";
+import { FC, Fragment, useMemo, useState } from "react";
 import { Conversation, User } from "@prisma/client";
 import useOtherUser from "@/app/hooks/useOtherUser";
 import { format } from "date-fns";
 import { Dialog, Transition } from "@headlessui/react";
 import { IoClose, IoTrash } from "react-icons/io5";
 import Avatar from "@/app/components/Avatar";
+import ConfirmModal from "@/app/conversations/[conversationId]/components/ConfirmModal";
 
 interface ProfileDrawerProps {
   conversation: Conversation & {
@@ -22,6 +23,7 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({
   onClose,
 }) => {
   const otherUser = useOtherUser(conversation);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const joinedDate = useMemo(() => {
     return format(new Date(otherUser.createdAt), "PP");
@@ -40,9 +42,21 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({
   }, [conversation.isGroup, conversation.users.length]);
 
   return (
-    <div>
+    <>
+      <ConfirmModal
+        isOpen={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+      />
       <Transition.Root show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50" onClose={onClose}>
+        <Dialog
+          as="div"
+          className="relative z-50"
+          onClose={() => {
+            if (!confirmOpen) {
+              onClose();
+            }
+          }}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-500"
@@ -175,7 +189,7 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({
                           </div>
                           <div className="flex gap-10 my-8">
                             <div
-                              onClick={() => {}}
+                              onClick={() => setConfirmOpen(true)}
                               className="flex
                               flex-col
                               gap-3
@@ -292,7 +306,7 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({
           </div>
         </Dialog>
       </Transition.Root>
-    </div>
+    </>
   );
 };
 
