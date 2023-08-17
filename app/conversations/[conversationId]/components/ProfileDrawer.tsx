@@ -8,6 +8,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { IoClose, IoTrash } from "react-icons/io5";
 import Avatar from "@/app/components/Avatar";
 import ConfirmModal from "@/app/conversations/[conversationId]/components/ConfirmModal";
+import AvatarGroup from "@/app/components/AvatarGroup";
 
 interface ProfileDrawerProps {
   conversation: Conversation & {
@@ -181,7 +182,11 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({
                           "
                         >
                           <div className="mb-2">
-                            <Avatar user={otherUser} />
+                            {conversation.isGroup ? (
+                              <AvatarGroup users={conversation.users} />
+                            ) : (
+                              <Avatar user={otherUser} />
+                            )}
                           </div>
                           <div>{title}</div>
                           <div className="text-sm text-gray-500">
