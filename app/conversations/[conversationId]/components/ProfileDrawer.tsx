@@ -244,6 +244,40 @@ const ProfileDrawer: FC<ProfileDrawerProps> = ({
                               sm:px-6
                               "
                             >
+                              {conversation.isGroup && (
+                                <div>
+                                  <dt
+                                    className="
+                                      text-sm
+                                      font-medium
+                                      text-gray-500
+                                      sm:w-40
+                                      sm:flex-shrink-0
+                                      "
+                                  >
+                                    Users
+                                  </dt>
+                                  <dd
+                                    className="
+                                      mt-1
+                                      text-sm
+                                      text-gray-900
+                                      sm:col-span-2
+                                      "
+                                  >
+                                    {conversation.users.map((user, index) => (
+                                      <span
+                                        key={user.id}
+                                        title={user.email || ""}
+                                      >
+                                        {user.name}
+                                        {conversation.users.length - 1 !==
+                                          index && ", "}
+                                      </span>
+                                    ))}
+                                  </dd>
+                                </div>
+                              )}
                               {!conversation.isGroup && (
                                 <div>
                                   <dt
